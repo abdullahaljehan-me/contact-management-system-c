@@ -3,8 +3,6 @@
 A simple command-line Contact Management System written in C.  
 This project can add contacts and display saved contacts using file handling.
 
-This is my first C project after completing Anisul Islam's C programming playlist.
-
 ## Features
 
 - Add a new contact
