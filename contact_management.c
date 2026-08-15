@@ -2,55 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "contacts.txt"
-
 struct Contact
 {
     char name[50];
     char phone[20];
     char email[50];
 };
-
-void clearInputBuffer(void)
-{
-    int ch;
-
-    while ((ch = getchar()) != '\n' && ch != EOF)
-    {
-        // discard characters
-    }
-}
-
-void removeNewline(char *str)
-{
-    str[strcspn(str, "\r\n")] = '\0';
-}
-
-void readLine(char *str, size_t size)
-{
-    if (fgets(str, (int)size, stdin) == NULL)
-    {
-        str[0] = '\0';
-        return;
-    }
-
-    int end = (int)strcspn(str, "\r\n");
-
-    if (str[end] != '\0')
-    {
-        str[end] = '\0';
-    }
-    else
-    {
-        clearInputBuffer();
-    }
-}
-
-void addContact(void)
+void addContact()
 {
     struct Contact c;
-
-    FILE *file = fopen(FILE_NAME, "a");
+    FILE *file = fopen("contacts.txt", "a");
 
     if (file == NULL)
     {
@@ -59,32 +20,28 @@ void addContact(void)
     }
 
     printf("\nEnter Name: ");
-    readLine(c.name, sizeof(c.name));
+    fgets(c.name, sizeof(c.name), stdin);
+    c.name[strcspn(c.name, "\n")] = 0;
 
     printf("Enter Phone: ");
-    readLine(c.phone, sizeof(c.phone));
+    fgets(c.phone, sizeof(c.phone), stdin);
+    c.phone[strcspn(c.phone, "\n")] = 0;
 
     printf("Enter Email: ");
-    readLine(c.email, sizeof(c.email));
+    fgets(c.email, sizeof(c.email), stdin);
+    c.email[strcspn(c.email, "\n")] = 0;
 
-    if (strlen(c.name) == 0 || strlen(c.phone) == 0 || strlen(c.email) == 0)
-    {
-        printf("Warning: All fields are required. Contact was not saved.\n");
-        fclose(file);
-        return;
-    }
-
-    fprintf(file, "%s\n%s\n%s\n\n", c.name, c.phone, c.email);
+    fprintf(file, "%s\n%s\n%s\n", c.name, c.phone, c.email);
+    fprintf(file, "\n");
     fclose(file);
 
     printf("Contact added to contact management system successfully!\n");
 }
 
-void displayContacts(void)
+void displayContacts()
 {
     struct Contact c;
-
-    FILE *file = fopen(FILE_NAME, "r");
+    FILE *file = fopen("contacts.txt", "r");
 
     if (file == NULL)
     {
@@ -92,36 +49,16 @@ void displayContacts(void)
         return;
     }
 
-    printf("=======================================================\n");
-    printf("||              CONTACT MANAGEMENT SYSTEM            ||\n");
-    printf("=======================================================\n");
-    printf("\n------ SAVED CONTACTS ------\n");
+    printf("\n=======================================================\n");
+    printf("||     CONTACT MANAGEMENT SYSTEM @abdullahaljehan    ||\n");
+    printf("=======================================================\n\n");
+    printf("\n           ------ SAVED CONTACTS ------               \n");
 
     int count = 0;
 
-    while (fgets(c.name, sizeof(c.name), file) != NULL)
+    while (fscanf(file, " %[^\n]\n %[^\n]\n %[^\n]\n", c.name, c.phone, c.email) != EOF)
     {
-        removeNewline(c.name);
-
-        if (strlen(c.name) == 0)
-        {
-            continue;
-        }
-
-        if (fgets(c.phone, sizeof(c.phone), file) == NULL)
-        {
-            break;
-        }
-        removeNewline(c.phone);
-
-        if (fgets(c.email, sizeof(c.email), file) == NULL)
-        {
-            break;
-        }
-        removeNewline(c.email);
-
         count++;
-
         printf("\nContact %d:\n", count);
         printf("Name  : %s\n", c.name);
         printf("Phone : %s\n", c.phone);
@@ -135,8 +72,7 @@ void displayContacts(void)
 
     fclose(file);
 }
-
-int main(void)
+int main()
 {
     int choice;
 
@@ -144,48 +80,35 @@ int main(void)
     {
         printf("\n======================================\n");
         printf("||     CONTACT MANAGEMENT SYSTEM    ||\n");
-        printf("======================================\n");
-        printf("[SYSTEM MENU]\n");
+        printf("======================================\n\n");
+
+        printf("[SYSTEM MENU]\n\n");
         printf("\t[1] ADD CONTACT\n");
         printf("\t[2] DISPLAY CONTACT\n");
         printf("\t[3] EXIT\n");
-        printf("\nENTER YOUR CHOICE (1-3): ");
 
-        int result = scanf("%d", &choice);
-
-        if (result == EOF)
-        {
-            printf("\nInput closed. Exiting system.\n");
-            return 0;
-        }
-
-        if (result != 1)
-        {
-            printf("Invalid input! Please enter a number between 1 and 3.\n");
-            clearInputBuffer();
-            continue;
-        }
-
-        clearInputBuffer();
+        printf("\nENTER YOUR CHOICE (1-3) : ");
+        scanf("%d", &choice);
+        getchar();
 
         switch (choice)
         {
         case 1:
             addContact();
             break;
-
         case 2:
             displayContacts();
             break;
-
         case 3:
             printf("Exiting system. Goodbye!\n");
-            return 0;
-
+            exit(0);
         default:
             printf("Invalid choice! Please try again.\n");
         }
     }
+
+    addContact();
+    displayContacts();
 
     return 0;
 }
