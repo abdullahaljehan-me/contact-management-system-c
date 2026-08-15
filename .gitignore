@@ -1,0 +1,8 @@
+# Compiled program
+contact_management
+contact_management.exe
+*.out
+*.o
+
+# Local contact data
+contacts.txt
