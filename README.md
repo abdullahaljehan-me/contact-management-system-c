@@ -1,27 +1,34 @@
-# Contact Management System in C
+# Contact Management System (C)
 
-A simple command-line Contact Management System written in C.  
-This project can add contacts and display saved contacts using file handling.
+A command-line contact manager written in C. Add, delete, list, and search contacts, with everything saved to a local text file so your data survives between runs.
 
 ## Features
 
-- Add a new contact
-- Display all saved contacts
-- Store contact data in a text file
-- Menu-driven console interface
-- Basic input validation
+- Add a contact (name, phone, email) — supports full names with spaces
+- Delete a contact by exact name match
+- List all saved contacts with a running total
+- Search by name, phone, or email substring
+- Loads from `contacts.txt` on startup, saves on every change and on exit
+- Input handling that won't overflow buffers or choke on `scanf` leftovers
 
-## Technologies Used
+## Build and run
 
-- C
-- File handling using `stdio.h`
-- GCC compiler
-- Git/GitHub
+```bash
+gcc contact_management.c -o contact_manager
+./contact_manager
+```
 
-## Project Structure
+## Project structure
 
-```text
+```
 contact-management-system-c/
 ├── contact_management.c
 ├── README.md
 └── .gitignore
+```
+
+## Notes
+
+- Storage is a flat text file, three lines per contact (name/phone/email). It works, but it's not built for large contact lists or concurrent access — a proper database is the next step if this grows.
+- Deleting requires an exact name match; there's no fuzzy matching or ID system yet.
+- Field lengths are capped (name/email 50 chars, phone 20) and input longer than that gets truncated, not rejected.
