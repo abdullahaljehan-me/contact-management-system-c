@@ -14,6 +14,12 @@ A command-line contact manager written in C. Add, delete, list, search, and sort
 
 ## Build and run
 
+## Prerequisites
+
+To compile and run this game, you need:
+- A C compiler (like `gcc`, `clang`, or `MinGW`).
+- A terminal or command prompt.
+
 ```bash
 gcc contact_management.c -o contact_manager
 ./contact_manager
