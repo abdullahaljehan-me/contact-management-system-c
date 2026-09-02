@@ -12,13 +12,13 @@ A command-line contact manager written in C. Add, delete, list, search, and sort
 - Loads from `contacts.txt` on startup, saves on every change and on exit
 - Input handling that won't overflow buffers or choke on `scanf` leftovers
 
-## Build and run
-
 ## Prerequisites
 
 To compile and run this game, you need:
 - A C compiler (like `gcc`, `clang`, or `MinGW`).
 - A terminal or command prompt.
+
+## Build and run
 
 ```bash
 gcc contact_management.c -o contact_manager
