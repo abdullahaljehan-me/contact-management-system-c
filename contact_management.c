@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define FILE_NAME "contacts.txt"
 #define MAX_CONTACTS 1000
@@ -239,6 +240,42 @@ void searchContact(const Contact contacts[], int count)
     }
 }
 
+// Comparison function for qsort to sort contacts alphabetically by name (case-insensitive)
+int compareByName(const void *a, const void *b)
+{
+    const Contact *contactA = (const Contact *)a;
+    const Contact *contactB = (const Contact *)b;
+    const char *strA = contactA->name;
+    const char *strB = contactB->name;
+
+    while (*strA && *strB)
+    {
+        int charA = tolower((unsigned char)*strA);
+        int charB = tolower((unsigned char)*strB);
+        if (charA != charB)
+        {
+            return charA - charB;
+        }
+        strA++;
+        strB++;
+    }
+    return tolower((unsigned char)*strA) - tolower((unsigned char)*strB);
+}
+
+// Sorts contacts alphabetically by name and saves the new order to disk
+void sortContacts(Contact contacts[], int count)
+{
+    if (count <= 1)
+    {
+        printf("\nNot enough contacts to sort.\n");
+        return;
+    }
+
+    qsort(contacts, count, sizeof(Contact), compareByName);
+    saveContacts(contacts, count);
+    printf("\nContacts sorted alphabetically by name successfully.\n");
+}
+
 int main(void)
 {
     Contact contacts[MAX_CONTACTS];
@@ -254,8 +291,9 @@ int main(void)
         printf("[2] Delete Contact\n");
         printf("[3] List Contacts\n");
         printf("[4] Search Contact\n");
-        printf("[5] Exit\n");
-        printf("\nEnter your choice (1-5): ");
+        printf("[5] Sort Contacts (by Name)\n");
+        printf("[6] Exit\n");
+        printf("\nEnter your choice (1-6): ");
 
         int result = scanf("%d", &choice);
         if (result == EOF)
@@ -265,7 +303,7 @@ int main(void)
         }
         if (result != 1)
         {
-            printf("Invalid input. Enter a number between 1 and 5.\n");
+            printf("Invalid input. Enter a number between 1 and 6.\n");
             clearInputBuffer();
             continue;
         }
@@ -286,6 +324,9 @@ int main(void)
             searchContact(contacts, count);
             break;
         case 5:
+            sortContacts(contacts, count);
+            break;
+        case 6:
             saveContacts(contacts, count);
             printf("Exiting. Goodbye!\n");
             return 0;
