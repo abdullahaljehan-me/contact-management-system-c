@@ -23,3 +23,11 @@ To compile and run this game, you need:
 ```bash
 gcc contact_management.c -o contact_manager
 ./contact_manager
+```
+---
+
+<div align="center">
+
+<sub>© 2026 abdullahaljehan-me · Licensed under MIT</sub>
+
+</div>
