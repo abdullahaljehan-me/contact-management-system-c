@@ -1,4 +1,4 @@
-# Contact Management System (C)
+# ☎️ Contact Management System (C)
 
 A command-line contact manager written in C. Add, delete, list, and search contacts, with everything saved to a local text file so your data survives between runs.
 
